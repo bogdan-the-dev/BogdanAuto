@@ -15,4 +15,110 @@ html {
 
 body {
   margin-bottom: 60px;
+  font-family: "Roboto", sans-serif;
+}
+
+.footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+div.login-logout-tab div.card-header {
+    padding: 0px 0px 12px 0px;
+}
+
+div.login-logout-tab ul.nav-tabs {
+    margin: 0px 0px -12px 0px;
+}
+
+div.login-logout-tab li.nav-item {
+    width: 50%;
+}
+
+div.login-logout-tab a.nav-link {
+    font-size: 25px;
+    color: #495057;
+    text-align: center;
+}
+
+.btn-social.facebook {
+    background: #3B5998;
+    color: white;
+    text-align: center;
+}
+
+.btn-social.google {
+    background: #cf553d;
+}
+
+.btn-external {
+    width: 80%;
+    display: block;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 21px;
+
+}
+.google {
+    color: white;
+}
+
+.google:hover{
+    color:white;
+}
+
+.btn-social {
+    padding: 10px;
+    text-align: center;
+}
+
+.centered-buttons {
+    position: relative;
+    left: 10%;
+}
+.btn-microsoft {
+    color: #fff;
+    background-color: #2672ec;
+    border-color: rgba(0,0,0,0.2)
+}
+
+    .btn-microsoft:focus, .btn-microsoft.focus {
+        color: #fff;
+        background-color: #125acd;
+        border-color: rgba(0,0,0,0.2)
+    }
+
+    .btn-microsoft:hover {
+        color: #fff;
+        background-color: #125acd;
+        border-color: rgba(0,0,0,0.2)
+    }
+
+    .btn-microsoft:active, .btn-microsoft.active, .open > .dropdown-toggle.btn-microsoft {
+        color: #fff;
+        background-color: #125acd;
+        border-color: rgba(0,0,0,0.2)
+    }
+
+
+
+    .btn-microsoft .badge {
+        color: #2672ec;
+        background-color: #fff
+    }
+    .btn-microsoft>:first-child {
+    position: absolute;
+    left: 15px;
+    top: 25%;
+    bottom: 0;
+    width: 20px;
+    line-height: 20px;
+    font-size: 1.6em;
+    text-align: center;
+    border-right: 1px solid rgba(0,0,0,0.2);
+
 }
