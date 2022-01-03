@@ -29,4 +29,13 @@
     <PackageReference Include="SendGrid.SmtpApi" Version="1.4.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\DeliveryStaff\Controllers\" />
+    <Folder Include="Areas\DeliveryStaff\Data\" />
+    <Folder Include="Areas\DeliveryStaff\Models\" />
+    <Folder Include="Areas\DeliveryStaff\Views\" />
+  </ItemGroup>
+
 </Project>
