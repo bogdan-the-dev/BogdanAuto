@@ -1,10 +1,15 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+﻿@using Bogdan_Auto.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<CustomerUser> SignInManager
+@inject UserManager<CustomerUser> UserManager
+@using Bogdan_Auto.Models
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+
+
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
     </li>

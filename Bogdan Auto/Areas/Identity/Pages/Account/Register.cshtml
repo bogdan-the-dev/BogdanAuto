@@ -1,0 +1,100 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml";
+}
+
+        <br />
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    
+              <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" />
+                        <label asp-for="Input.FirstName"></label>
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+                  </div>
+                               
+                  <div class="col-md-6">
+                      <div class="form-floating">
+                        <input asp-for="Input.LastName" class="form-control" autocomplete="username" aria-required="true" />
+                        <label asp-for="Input.LastName"></label>
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                      </div>
+                  </div>
+              </div>
+              <br>
+              <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                        <label asp-for="Input.Email"></label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                  </div>
+              </div>
+               <br />
+               <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-floating">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+                        <label asp-for="Input.Password"></label>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                      </div>
+                  </div>
+
+                  <div class="col-md-6">
+                      <div class="form-floating">
+                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                        <label asp-for="Input.ConfirmPassword"></label>
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                      </div>
+                  </div>
+            </div>
+            <br />
+            <button id="registerSubmit" type="submit" class="btn-primary">Register</button>
+        </form>
+
+    
+            <h3>Use another service to register.</h3>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                   
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div class="centered-buttons">
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                @if (provider.Name == "Facebook")
+                                {
+                                    <button type="submit" class="btn btn-external btn-social facebook mt-md roundButton" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                } else if(provider.Name == "Google")
+                                {
+                                    <button type="submit" class="btn btn-external btn-social google mt-md roundButton" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>  
+                                }else if (provider.Name == "Microsoft")
+                                {
+                                    <button type="submit" class="btn btn-external mt-md roundButton btn-social btn-block btn-social btn-microsoft centerH " name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="microsoft" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-microsoft fa-w-14 fa-2x"><path fill="currentColor" d="M0 32h214.6v214.6H0V32zm233.4 0H448v214.6H233.4V32zM0 265.4h214.6V480H0V265.4zm233.4 0H448V480H233.4V265.4z"  attribute="font-size:18px;"></path></svg>  @provider.DisplayName</button>
+                                } else
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button> 
+                                }
+                            }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+ 
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
