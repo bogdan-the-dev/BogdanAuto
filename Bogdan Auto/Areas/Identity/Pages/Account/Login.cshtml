@@ -6,24 +6,30 @@
     Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
+    <br />
+    <div class="col-md-10 offset-md-1">
         <section>
             <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
-                <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-floating">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
-                    <label asp-for="Input.Email" class="form-label"></label>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div class="form-floating">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
-                    <label asp-for="Input.Password" class="form-label"></label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
+                    <div class="row">
+
+                            <div class="form-floating">
+                                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                                <label asp-for="Input.Email" class="form-label"></label>
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+                    </div>
+             <br />
+
+                    <div class="row">
+                            <div class="form-floating" style="border-radius: 5px;">
+                                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                                <label asp-for="Input.Password" class="form-label"></label>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                    </div>
+               
+                
                 <div>
                     <div class="checkbox">
                         <label asp-for="Input.RememberMe" class="form-label">
@@ -33,8 +39,9 @@
                     </div>
                 </div>
                 <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                    <button id="login-submit" type="submit" class="btn btn-lg btn-primary" style="border-radius: 21px;">Log in</button>
                 </div>
+                <br />
                 <div>
                     <p>
                         <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
@@ -49,37 +56,43 @@
             </form>
         </section>
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
+           
+            <div class="text-muted mt-md" style="width: 100%;text-align: center">
+                <div class="text-hr-line">
+                    <span >or you can use the following services</span>
+                </div>
+          </div>
+          @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
+                   
                 }
                 else
                 {
                     <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
+                        <div class="centered-buttons">
                             <p>
                                 @foreach (var provider in Model.ExternalLogins)
                                 {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                @if (provider.Name == "Facebook")
+                                {
+                                    <button type="submit" class="btn btn-external btn-social facebook mt-md roundButton" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                } else if(provider.Name == "Google")
+                                {
+                                    <button type="submit" class="btn btn-external btn-social google mt-md roundButton" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>  
+                                }else if (provider.Name == "Microsoft")
+                                {
+                                    <button type="submit" class="btn btn-external mt-md roundButton btn-social btn-block btn-social btn-microsoft centerH " name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="microsoft" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-microsoft fa-w-14 fa-2x"><path fill="currentColor" d="M0 32h214.6v214.6H0V32zm233.4 0H448v214.6H233.4V32zM0 265.4h214.6V480H0V265.4zm233.4 0H448V480H233.4V265.4z"  attribute="font-size:18px;"></path></svg>  @provider.DisplayName</button>
+                                } else
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button> 
                                 }
+                            }
                             </p>
                         </div>
                     </form>
                 }
             }
-        </section>
-    </div>
-</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
