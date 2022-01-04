@@ -51,22 +51,29 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/AboutUs">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                              <form id="searchByName" action="/action_page.php" method="post">
+                              <input type="text" placeholder="Search" name="search">
+                              <button type="submit"><i class="fa fa-search"></i></button>
+                               </form>                      
+                          </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
             @RenderBody()
-        </main>
-    </div>
+
 
     <footer class="border-top footer text-muted">
          <partial name="_CookieConsentPartial" />
         <div class="container">
-            &copy; 2021 - Bogdan Auto - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2022 - Bogdan Auto - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
