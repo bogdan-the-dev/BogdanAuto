@@ -1,21 +1,4 @@
-﻿﻿@using System.Net.Http
-@using Bogdan_Auto.Models
-@using Bogdan_Auto.Services
-@using Microsoft.AspNetCore.Http
-@inject IHttpContextAccessor HttpContextAccessor
-@{
-     var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
-    int count = 0;
-    List<Product> products = HttpContextAccessor.HttpContext.Session.Get<List<Product>>("products");
-    if (products==null)
-    {
-        products=new List<Product>();
-    }
-    count = products.Count();
-}
-
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -39,22 +22,33 @@
 />
 <!-- MDB -->
 <link  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css" rel="stylesheet"/>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
+
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
 
 
+        
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebRPnoAuth2Auth.styles.css" asp-append-version="true" />
 </head>
-<body>
+
+<body>  
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Home/Index">Bogdan Auto</a>
+                <a class="navbar-brand">Bogdan Auto Management Portal</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -62,19 +56,16 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Products" asp-conttroller="Product" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Index" asp-action="Index">Dashbord</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Info" asp-page="/Home/Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="ProductManagement" asp-action="Index">Product Management</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Info" asp-page="/AboutUs">About Us</a>
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="CategoryManagement" asp-action="Index">Category Management</a>
                         </li>
                         <li class="nav-item">
-                              <form id="searchByName" action="/action_page.php" method="post">
-                              <input type="text" placeholder="Search" name="search">
-                              <button type="submit"><i class="fa fa-search"></i></button>
-                               </form>                      
+                              <a class="nav-link text-dark" asp-area="Admin" asp-controller="AccountManagement" asp-action="Index">Account Management</a>           
                           </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -82,24 +73,13 @@
             </div>
         </nav>
     </header>
-
-
-
-               <div class="container">
+    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-
-    <footer class="border-top footer text-muted">
-         <partial name="_CookieConsentPartial" />
-        <div class="container">
-            &copy; 2022 - Bogdan Auto - <a asp-area="Info" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/MDB5/js/mdb.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
