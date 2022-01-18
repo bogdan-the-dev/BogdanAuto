@@ -1,0 +1,67 @@
+﻿@using Bogdan_Auto.Models
+@model IEnumerable<Order>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "My Orders";
+}
+
+<br />
+<div>
+    <div class="row">
+        <div class="col-4">
+            <h2 class="text-info">My Orders</h2>
+        </div>
+    </div>
+    <br />
+    <table class="table table-striped borders">
+        <tr class="table-info">
+            <th>
+                @Html.DisplayNameFor(o => o.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(o => o.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(o => o.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(o => o.DateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(o => o.TotalCost)  
+            </th>
+            <th>
+                @Html.DisplayNameFor(o => o.Status)
+            </th>
+            <th></th>
+        </tr>
+        @if(Model != null)foreach(var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Id
+                    </td>
+                    <td>
+                        @item.Address
+                    </td>
+                    <td>
+                        @item.PhoneNumber
+                    </td>
+                    <td>
+                        @item.DateTime
+                    </td>
+                    <td>
+                        @item.TotalCost <i class="fas fa-ruble-sign"></i>
+                    </td>
+                    <td>
+                        @((OrderStatus)item.Status)
+                    </td>
+
+                    <td style="width: 50px">
+                        <partial name="_ButtonPartialOrderDetail.cshtml" model="@item.Id">
+                    </td>
+
+                </tr>
+            }
+    </table>
+</div>

@@ -1,0 +1,93 @@
+﻿@using Bogdan_Auto.Data
+@using Bogdan_Auto.Models
+@inject ApplicationDbContext _context
+@model Order
+@{
+    Layout = "~/Areas/DeliveryStaff/Views/_DeliveryLayout.cshtml";
+    ViewData["Title"] = "Order Status";
+}
+
+<h2 class="text-info">Order processing</h2>
+
+<form asp-action="Edit" method="post">
+    <div class="p-4 rounded border">
+        <div asp-validation-summary="ModelOnly" class="text-danger">
+
+
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="TrackingNumber"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="TrackingNumber" class="form-control" />
+                <input asp-form="Id" hidden />
+            </div>
+        </div>
+        <br />
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Status" id="stat"></label>
+            </div>
+            <div class="col-5">
+                <select asp-for="Status" id="selectSta" >
+                    <option value=@Model.Status>@(Model.Status)</option>
+                    @foreach(OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
+                    {
+                        if(status != Model.Status)
+                        {
+                            <option value=@status>@(status)</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Update Order" />
+            <a asp-action="Index" class="btn btn-success">Back to order list</a>
+        </div>
+    </div>
+</form>
+
+
+<h2 class="text-success">Ordered items</h2>
+
+<div>
+    <table class="table borders">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Name</th>
+                <th>Warranty</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if(Model != null)foreach(var item in _context.OrderProduct.Where(o => o.OrderId == Model.Id).ToList())
+            {
+                var prod = _context.Products.FirstOrDefault(p => p.Id == item.ProductId);
+                if (prod == null)
+                {
+                }
+                else
+                {
+                    <tr>
+                        <td> <img src="~/@prod.PhotoPath" width="120px"/></td>
+                    <td>@prod.Name</td>
+                    <td>@prod.WarrantyPeriod</td>
+                    <td>@item.ProductIndividualPrice <i class="fas fa-ruble-sign"></i></td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col col-9"></div>
+        <div class="col col-md-3">
+            <h5>Total cost: @Model.TotalCost <i class="fas fa-ruble-sign"></i></h5>         
+        </div>
+    </div>
+    
+</div>

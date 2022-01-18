@@ -40,7 +40,7 @@
                     <label asp-for="PhotoPath"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="PhotoPath" class="form-control" type="file" />
+                    <input asp-for="PhotoPath" class="form-control" type="file" value=@Model.PhotoPath.ToString() />
                 </div>
             </div>
             <br />

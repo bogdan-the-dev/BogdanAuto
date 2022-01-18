@@ -17,5 +17,7 @@ namespace Bogdan_Auto.Data
         public DbSet<Category> Categories { get; set;}
         public DbSet<AdminUser> AdminUsers { get; set;}
         public DbSet<DeliveryStaffUser> DeliveryStaffUsers { get;set;}
+        public DbSet<Order> Order { get; set;}
+        public DbSet<OrderProduct> OrderProduct { get; set;}
     }
 }

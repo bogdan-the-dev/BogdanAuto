@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Bogdan_Auto.Data;
 using Bogdan_Auto.Models;
+using Microsoft.AspNetCore.Authorization;
+
 namespace Bogdan_Auto.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+
     public class ManufacturerManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,7 +23,7 @@ namespace Bogdan_Auto.Areas.Admin.Controllers
         }
 
         //Create Get action method
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }

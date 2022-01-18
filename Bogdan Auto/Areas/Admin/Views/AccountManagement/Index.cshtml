@@ -1,6 +1,6 @@
 ﻿@using Bogdan_Auto.Models
 @using Microsoft.AspNetCore.Identity
-@model IEnumerable<IdentityUser>
+@model IEnumerable<CustomerUser>
 @{
     ViewData["Title"] = "Account Management";
     Layout = "~/Areas/Admin/Views/_AdminLayout.cshtml";
@@ -13,13 +13,9 @@
     </div>
     <div class="col-2"></div>
     <div class="col-2">
-        <select >
-            <option>All</option>
-            <option>Admin</option>
-            <option>Delivery Staff</option>
-        </select>
+        
     </div>
-    <div class="col-2"></div>
+    <div class="col-4"></div>
     <div class="col-md-2 text-right">
         <a asp-action="Create" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp;Create staff Account</a>
     </div>
@@ -33,16 +29,14 @@
             <th>Is Disabled</th>
             <th>@Html.DisplayNameFor(p => p.AccessFailedCount)</th>
             <th></th>
+            <th></th>
         </tr>
         @if(Model != null)foreach(var item in Model)
             {
                 <tr>
                     <td>@item.Id</td>
                     <td>@item.UserName</td>
-                    if (p is AdminUser)
-                        <td>@((AdminUser) item).IsDisabled</td>
-                    else
-                        <td>@((DeliveryStaffUser) item).IsDisabled)</td>
+                    <td>@item.IsDisabled</td>
                     <td>@item.AccessFailedCount</td>
                     <td style="width:50px">
                         <partial name="_ButtonPartialAccount" model="@item.Id"/>

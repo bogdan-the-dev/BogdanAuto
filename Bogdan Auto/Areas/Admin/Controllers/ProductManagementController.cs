@@ -5,10 +5,13 @@ using System.Linq;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bogdan_Auto.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+
     public class ProductManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -49,6 +52,7 @@ namespace Bogdan_Auto.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product, IFormFile PhotoPath)
         {
+            ModelState.Remove("orderProducts");
             if (ModelState.IsValid)
             {
                 if (IsNameUnique(product))
@@ -109,11 +113,19 @@ namespace Bogdan_Auto.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Product product, IFormFile PhotoPath)
         {
+            ModelState.Remove("orderProducts");
+            var photoUnchanged = false;
+            var productForValidation = _context.Products.AsNoTracking().FirstOrDefault(p => p.Id == product.Id);
+          //  if (productForValidation.PhotoPath.Contains(PhotoPath.FileName))
+            //    {
+         // //      photoUnchanged = true;
+//ModelState.Remove("PhotoPath");
+        //    }
             if (ModelState.IsValid)
             {
                 if (IsNameUnique(product))
                 {
-                    var productForValidation = _context.Products.AsNoTracking().FirstOrDefault(p => p.Id == product.Id);
+                    
                     if (productForValidation != null && productForValidation.Name != product.Name)
                     { 
                         ModelState.AddModelError(string.Empty, "Product already exists");
@@ -122,23 +134,28 @@ namespace Bogdan_Auto.Areas.Admin.Controllers
                         return View(product);
                     }
                 }
-                if (PhotoPath != null)
+                if (!photoUnchanged)
                 {
-                    var folderPath = Path.Combine(_he.WebRootPath, "WebSite Resources", product.Name);
-                    if (!Directory.Exists(folderPath))
+                    if (PhotoPath != null)
                     {
-                        Directory.CreateDirectory(folderPath);
+                        var folderPath = Path.Combine(_he.WebRootPath, "WebSite Resources", product.Name);
+                        folderPath.Replace(" ", "_");
+                        if (!Directory.Exists(folderPath))
+                        {
+                            Directory.CreateDirectory(folderPath);
+                        } 
+                        var imageName = Path.Combine(folderPath, PhotoPath.FileName);
+                        var fileStream = new FileStream(imageName, FileMode.Create);
+                        await PhotoPath.CopyToAsync(fileStream);
+                        fileStream.Close();
+                        product.PhotoPath = Path.Combine("WebSite Resources", product.Name, PhotoPath.FileName);
                     }
-                    var imageName = Path.Combine(folderPath, PhotoPath.FileName);
-                    var fileStream = new FileStream(imageName, FileMode.Create);
-                    await PhotoPath.CopyToAsync(fileStream);
-                    fileStream.Close();
-                    product.PhotoPath = Path.Combine("WebSite Resources", product.Name, PhotoPath.FileName);
+                    if (PhotoPath == null)
+                    {
+                        product.PhotoPath = Path.Combine("Default", "noimage.PNG");
+                    }
                 }
-                if (PhotoPath == null)
-                {
-                    product.PhotoPath = Path.Combine("Default", "noimage.PNG");
-                }
+                TempData["edit"] = "Changes were saved";
                 _context.Products.Update(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -183,7 +200,9 @@ namespace Bogdan_Auto.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> IncrementStock(Product product)
         {
-            if(ModelState.IsValid)
+            ModelState.Remove("orderProducts");
+
+            if (ModelState.IsValid)
             {
                 _context.Products.Update(product);
                 await _context.SaveChangesAsync();
@@ -225,6 +244,7 @@ namespace Bogdan_Auto.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            TempData["delete"] = "Product deleted";
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

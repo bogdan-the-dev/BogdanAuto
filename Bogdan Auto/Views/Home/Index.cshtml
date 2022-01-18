@@ -1,18 +1,52 @@
-﻿@{
+﻿@using Bogdan_Auto.Models;
+@using X.PagedList.Mvc.Common
+@using X.PagedList.Mvc.Core
+@model X.PagedList.IPagedList<Product>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Home Page";
 }
+<h2>
+    Our catalogue
+</h2>
 
-
-
-<img src="~/Resources/bmw.jfif">
-
-<div class="banner">
-    <div class="banner-bg fill bg-fill bg-loaded">
-        <div class="overlay">
-        
-        </div>
-    </div>
+<br/>
+<div class="row">
+    @foreach (var product in Model)
+    {
+        if(product.IsAvailable == true)
+        {    
+            <div class="col-4">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">
+                                <label style="font-size: 23px;color: steelblue">@product.Name</label>
+                            </h4>
+                        </div>
+                        <img src="~/@product.PhotoPath" alt="Card Image" class="card-img-top" style="height: 300px;"/>
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <label style="font-size: 20px;color: #a51313"><b>Price : @product.Price </b><i class="fas fa-ruble-sign"></i></label>
+                                </div>
+                            @if (product.AvailableQuantity == 0)
+                            {
+                                <div >
+                                    Out of stock!
+                                </div>
+                            }
+                            <a asp-action="Details" asp-controller="Home" asp-route-id="@product.Id" class="btn btn-success pull-right btn-outline-info">Deatils</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        }
+    }
 </div>
+<div>
+</div>
+
+
 
 
 
