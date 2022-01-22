@@ -11,6 +11,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Bogdan_Auto.Models;
+using Bogdan_Auto.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +30,7 @@ namespace Bogdan_Auto.Areas.Identity.Pages.Account
         private readonly IUserStore<CustomerUser> _userStore;
         private readonly IUserEmailStore<CustomerUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private EmailService _emailService;
 
         public RegisterModel(
             UserManager<CustomerUser> userManager,
@@ -43,7 +44,7 @@ namespace Bogdan_Auto.Areas.Identity.Pages.Account
             _emailStore = (IUserEmailStore<CustomerUser>)GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
+            _emailService = new EmailService();
         }
 
         /// <summary>
@@ -148,12 +149,12 @@ namespace Bogdan_Auto.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                     _emailService.SendEmail(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                      //  return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }
                     else
                     {

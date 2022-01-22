@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-
+using Bogdan_Auto.Data;
 namespace Bogdan_Auto.Areas.Identity.Pages.Account.Manage
 {
     public class DeletePersonalDataModel : PageModel
@@ -18,15 +18,18 @@ namespace Bogdan_Auto.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<CustomerUser> _userManager;
         private readonly SignInManager<CustomerUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly ApplicationDbContext _context;
 
         public DeletePersonalDataModel(
             UserManager<CustomerUser> userManager,
             SignInManager<CustomerUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         /// <summary>

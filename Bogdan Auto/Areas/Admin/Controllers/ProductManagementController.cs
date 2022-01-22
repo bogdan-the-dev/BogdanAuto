@@ -114,13 +114,14 @@ namespace Bogdan_Auto.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(Product product, IFormFile PhotoPath)
         {
             ModelState.Remove("orderProducts");
+            ModelState.Remove("PhotoPath");
             var photoUnchanged = false;
             var productForValidation = _context.Products.AsNoTracking().FirstOrDefault(p => p.Id == product.Id);
-          //  if (productForValidation.PhotoPath.Contains(PhotoPath.FileName))
-            //    {
-         // //      photoUnchanged = true;
-//ModelState.Remove("PhotoPath");
-        //    }
+            Console.WriteLine(Path.Combine("Default", "noimage.PNG"));
+            if(productForValidation != null && productForValidation.PhotoPath != Path.Combine("Default", "noimage.PNG"))
+            {
+                photoUnchanged = true;
+            }
             if (ModelState.IsValid)
             {
                 if (IsNameUnique(product))
@@ -154,6 +155,10 @@ namespace Bogdan_Auto.Areas.Admin.Controllers
                     {
                         product.PhotoPath = Path.Combine("Default", "noimage.PNG");
                     }
+                }
+                else
+                {
+                    product.PhotoPath = productForValidation.PhotoPath;
                 }
                 TempData["edit"] = "Changes were saved";
                 _context.Products.Update(product);
@@ -208,6 +213,7 @@ namespace Bogdan_Auto.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            TempData["stock"] = "The stock was updated";
             return View(product);
         }
 

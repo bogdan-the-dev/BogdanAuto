@@ -56,13 +56,26 @@
             if(save!='') {
                 alertify.success(save);
             }
-            var edit = '@TempData["Disabled"]'
-            if(edit!='') {
-                alertify.success(edit);
+            var disabled = '@TempData["disabled"]'
+            if(disabled!='') {
+                alertify.success(disabled);
+            }
+            var enabled = '@TempData["enabled"]'
+            if(enabled != ''){
+                alertify.success(enabled)
             }
             var del = '@TempData["delete"]'
             if (del!='') {
                 alertify.error(del);
+            }
+            var updated = '@TempData["updated"]'
+            if(updated != '')
+            {
+                alertify.success(updated)
+            }
+            var error = '@TempData["error"]'
+            if(error != ''){
+                alertify.error(error)
             }
         })
     </script>

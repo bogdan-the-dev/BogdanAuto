@@ -144,14 +144,71 @@ namespace Bogdan_Auto.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-          
+            if (User.Identity.Name == _context.Users.FirstOrDefault(u => u.Id == id).UserName)
+            {
+                TempData["error"] = "You can't delete the account you are using";
+            }
+            else
+            {
                 _context.Remove(userDeletion);
                 await _context.SaveChangesAsync();
                 TempData["delete"] = "The accound was deleted";
-                return RedirectToAction(nameof(Index));
-            
+            }
+            return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Disable(string? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var user = _context.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            if(User.Identity.Name == _context.Users.FirstOrDefault(u => u.Id == id).UserName)
+            {
+                TempData["error"] = "Could not disable current account";
+            }
+            else
+            {
+                user.IsDisabled = true;
+                TempData["disabled"] = "The account was disabled";
+                _context.Update(user);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        
+        public IActionResult Enable(string? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var user = _context.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            if (User.Identity.Name == _context.Users.FirstOrDefault(u => u.Id == id).UserName)
+            {
+                TempData["error"] = "Could not enable current account";
+            }
+            else
+            {
+                user.IsDisabled = false;
+                TempData["enabled"] = "The account was enabled";
+                _context.Update(user);
+                _context.SaveChanges();
+            }
+            return RedirectToAction(nameof(Index));
+        }
 
         private bool isemailTaken(string email)
         {
