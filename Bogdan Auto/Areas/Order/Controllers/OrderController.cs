@@ -45,6 +45,7 @@ namespace Bogdan_Auto.Areas.Order.Controllers
             anOrder.Email = currentUser.Email;
             anOrder.ClientId = currentUser.Id;
             anOrder.DateTime = DateTime.Now;
+            anOrder.TrackingNumber = "";
             anOrder.TotalCost = totalPrice;
             _context.Order.Add(anOrder);
             await _context.SaveChangesAsync();

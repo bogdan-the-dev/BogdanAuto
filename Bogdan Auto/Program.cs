@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Bogdan_Auto.Services;
 using Bogdan_Auto.Models;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Bogdan_Auto;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -37,8 +41,22 @@ services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
         // requires using Microsoft.AspNetCore.Http;
         options.MinimumSameSitePolicy = SameSiteMode.None;
     });
+    services.AddSession(options =>
+    {
+        // Set a short timeout for easy testing.
+        options.IdleTimeout = TimeSpan.FromMinutes(30);
+        //options.Cookie.HttpOnly = true;
+        // Make the session cookie essential
+        options.Cookie.IsEssential = true;
+    });
 
-    services.AddRazorPages();
+services.AddRazorPages();
+    services.AddDistributedMemoryCache();
+
+services.ConfigureApplicationCookie(o => {
+    o.ExpireTimeSpan = TimeSpan.FromDays(5);
+    o.SlidingExpiration = true;
+});
 
 
 // Add services to the container.
@@ -47,10 +65,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddDefaultIdentity<CustomerUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<CustomerUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true).AddRoleManager<RoleManager<IdentityRole>>().AddDefaultUI()
+    .AddEntityFrameworkStores<ApplicationDbContext>().AddTokenProvider<DataProtectorTokenProvider<CustomerUser>>(TokenOptions.DefaultProvider);
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.SlidingExpiration = true;
+        options.AccessDeniedPath = "/Forbidden/";
+    });
+
+
 
 var app = builder.Build();
 
@@ -70,32 +96,56 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCookiePolicy();
 
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+void initService(UserManager<CustomerUser> userManager, RoleManager<IdentityRole> roleManager)
+{
+    SeedData.Seed(userManager, roleManager);
+}
+
+
+
 app.UseEndpoints(endpoints =>
     {
-        
+      
+
         endpoints.MapAreaControllerRoute(
             name: "AdminArea",
             areaName: "Admin",
-            pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
+            pattern: "Admin/{controller=AdminController}/{action=Index}/{id?}");
 
         endpoints.MapAreaControllerRoute(
             name: "DeliveryStaffArea",
             areaName: "DeliveryStaff",
-            pattern: "DeliveryStaff/{controller=Home}/{action=Index}/{id?}");
+            pattern: "DeliveryStaff/{controller=DeliveryController}/{action=Index}/{id?}");
+
+        endpoints.MapAreaControllerRoute(
+            name: "Info",
+            areaName: "Info",
+            pattern: "{controller=Info}/{action=Privacy}");
+        endpoints.MapAreaControllerRoute(
+            name: "Products",
+            areaName: "Products",
+            pattern: "Products/{controller=ProductController}/{action=Index}/{id?}"
+            );
+
+        endpoints.MapAreaControllerRoute(
+            name: "Order",
+            areaName: "Order",
+            pattern: "Order/{controller=OrderController}/{action=Checkout}/{id?}"
+            );
 
         endpoints.MapControllerRoute(
-            name: "default",
+            name: "Home",
             pattern: "{controller=Home}/{action=Index}/{id?}");
     });
 
 
 app.MapRazorPages();
 
-
-
 app.Run();
+

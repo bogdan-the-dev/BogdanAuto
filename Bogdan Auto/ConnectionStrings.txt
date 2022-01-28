@@ -1,0 +1,3 @@
+    "DefaultConnection": "Server=DELLG3;Database=bogdan_auto;Trusted_Connection=False;MultipleActiveResultSets=true;user id=Bogdan;pwd=W3lcome1!"
+
+    "DefaultConnection": "Server=192.168.0.103;Database=bogdan_auto;Trusted_Connection=False;MultipleActiveResultSets=true;user id=Bogdan;pwd=W3lcome1!"

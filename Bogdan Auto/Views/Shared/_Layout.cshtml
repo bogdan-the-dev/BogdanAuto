@@ -2,6 +2,8 @@
 @using Bogdan_Auto.Models
 @using Bogdan_Auto.Services
 @using Microsoft.AspNetCore.Http
+@using Bogdan_Auto.Data
+@inject ApplicationDbContext _context
 @inject IHttpContextAccessor HttpContextAccessor
 @{
      var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
@@ -101,11 +103,47 @@
                 </div>
             </div>
         </nav>
+         
+    <script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+</script>
     </header>
 
 
 
-               <div class="container">
+    
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <h4>&nbsp;Advanced Filtering</h4>
+  <br />
+  <h5>&nbsp;Categories</h5>
+  @using(Html.BeginForm("index", "HomeController", FormMethod.Get))
+  {
+    <div class="col">
+    @foreach(var category in _context.Categories.ToList())
+    {
+        <div class="row">
+            <div class="col">
+                <input type="checkbox" value=@category.Name>
+            </div>
+            <div class="col col-md4">
+                 <label>@category.Name</label>               
+            </div>
+        </div>
+    }
+       </div>
+  }
+</div>
+<!-- <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; &nbsp;Advanced Filtering</span>--> 
+
+    
+    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

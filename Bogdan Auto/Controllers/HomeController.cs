@@ -23,9 +23,9 @@ namespace Bogdan_Auto.Controllers
         {
             if (name != null)
             {
-                return View(_context.Products.Include(c => c.Manufacturer).Include(c => c.Category).Where(c => c.Name.Contains(name)).ToList().ToPagedList(page ?? 1, 9));
+                return View(_context.Products.Include(c => c.Manufacturer).Include(c => c.Category).Where(c => c.Name.Contains(name) && c.IsAvailable == true).ToList().ToPagedList(page ?? 1, 9));
             }
-            return View(_context.Products.Include(c => c.Manufacturer).Include(c => c.Category).ToList().ToPagedList(page ?? 1, 9));
+            return View(_context.Products.Include(c => c.Manufacturer).Include(c => c.Category).Where(c => c.IsAvailable == true).ToList().ToPagedList(page ?? 1, 9));
         }
         [AllowAnonymous]
         public IActionResult Privacy()

@@ -40,7 +40,7 @@
                 <label asp-for="Price"></label>
             </div>
             <div class="col-8">
-                <input asp-for="Price" readonly="readonly"  class="form-control" />
+                <input asp-for="Price" readonly="readonly" style=" :focus { outline: none; } "  class="form-control" />
             </div>
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
@@ -72,7 +72,7 @@
                 <label asp-for="Description"></label>
             </div>
             <div class="col-8">
-                <textarea  asp-for="Description" readonly="readonly" class="form-control" rows="5"></textarea>
+                <textarea  asp-for="Description" readonly="readonly" style="resize: none;" class="form-control" rows="5"></textarea>
             </div>
             <span asp-validation-for="Description"  class="text-danger"></span>
         </div>
@@ -99,16 +99,7 @@
                 <span asp-validation-for="ManufacturerId" class="text-danger"></span>
             </div>
         <br />
-        <div class="form-group row">
-            <div class="col-4">
-                <label asp-for="IsAvailable"></label>
-            </div>
-            <div class="col-8">
-                <input asp-for="IsAvailable" disabled="disabled" class="" type="checkbox"/>
-            </div>
-            <span asp-validation-for="IsAvailable" class="text-danger"></span>
-        </div>
-        <br />
+        
         <div class="form-group">
             @if(Model.AvailableQuantity > 0)
             {

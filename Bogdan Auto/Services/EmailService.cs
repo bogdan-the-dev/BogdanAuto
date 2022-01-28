@@ -45,7 +45,7 @@ namespace Bogdan_Auto.Services
                 using (var message = new MailMessage("bogdan.auto.group@gmail.com", to)
                 {
                     Subject = subject,
-                    Body = body
+                    Body = body                 
                 })
                 {
                     smtp.Send(message);

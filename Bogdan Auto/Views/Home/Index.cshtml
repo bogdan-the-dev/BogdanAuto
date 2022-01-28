@@ -1,5 +1,6 @@
 ﻿@using Bogdan_Auto.Models;
 @using X.PagedList.Mvc.Common
+@using X.PagedList;
 @using X.PagedList.Mvc.Core
 @model X.PagedList.IPagedList<Product>
 @{
@@ -44,6 +45,7 @@
     }
 </div>
 <div>
+    @Html.PagedListPager(Model,c=>Href("~/?page="+c))
 </div>
 
 
