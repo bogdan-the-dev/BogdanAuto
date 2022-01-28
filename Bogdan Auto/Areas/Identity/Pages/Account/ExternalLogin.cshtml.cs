@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Bogdan_Auto.Models;
+using Bogdan_Auto.Services;
 
 namespace Bogdan_Auto.Areas.Identity.Pages.Account
 {
@@ -30,6 +31,7 @@ namespace Bogdan_Auto.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<CustomerUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private Services.EmailService _emailService = new Services.EmailService();
 
         public ExternalLoginModel(
             SignInManager<CustomerUser> signInManager,
@@ -184,17 +186,17 @@ namespace Bogdan_Auto.Areas.Identity.Pages.Account
                             pageHandler: null,
                             values: new { area = "Identity", userId = userId, code = code },
                             protocol: Request.Scheme);
-
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                            
+                            _emailService.SendEmail(Input.Email, "Confirm your email",
+                            $"Please confirm your account by <a href='{(callbackUrl)}'>clicking here</a>.");
 
                         // If account confirmation is required, we need to show the link if we don't have a real email sender
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)
                         {
-                            return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
+                            //return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
                         }
 
-                        await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
+                     //   await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
                         return LocalRedirect(returnUrl);
                     }
                 }

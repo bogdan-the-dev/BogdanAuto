@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Bogdan_Auto.Services;
 
 namespace Bogdan_Auto.Areas.Identity.Pages.Account
 {
@@ -21,12 +22,11 @@ namespace Bogdan_Auto.Areas.Identity.Pages.Account
     public class ResendEmailConfirmationModel : PageModel
     {
         private readonly UserManager<CustomerUser> _userManager;
-        private readonly IEmailSender _emailSender;
-
-        public ResendEmailConfirmationModel(UserManager<CustomerUser> userManager, IEmailSender emailSender)
+        private EmailService _emailService;
+        public ResendEmailConfirmationModel(UserManager<CustomerUser> userManager)
         {
             _userManager = userManager;
-            _emailSender = emailSender;
+            _emailService = new EmailService();
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Bogdan_Auto.Areas.Identity.Pages.Account
                 pageHandler: null,
                 values: new { userId = userId, code = code },
                 protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
+            _emailService.SendEmail(
                 Input.Email,
                 "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");

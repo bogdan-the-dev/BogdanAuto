@@ -1,0 +1,75 @@
+﻿@using Bogdan_Auto.Models
+@using Bogdan_Auto.Data
+@inject ApplicationDbContext _context
+@model IEnumerable<OrderProduct>
+@{
+    Layout = "~/Areas/DeliveryStaff/Views/_DeliveryLayout.cshtml";
+    ViewData["Title"] = "Order Managemen";
+}
+
+<div class="row">
+    <div class="col-4">
+        <h5>Order status</h5>
+    </div>
+    <div class="col-6">
+        <h5>@((OrderStatus)(ViewBag.order.Status))</h5>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <h5>Tracking number</h5>
+    </div>
+    <div class="col-6">
+        @if(@ViewBag.order.TrackingNumber == "")
+        {
+            <h5>Not generated</h5>
+        }
+        else
+        {
+            <h5>@ViewBag.order.TrackingNumber</h5>
+        }
+    </div>
+</div>
+<br />
+<a asp-action="Index" class="btn btn-success">Back to order list</a>
+<br />
+<br />
+<h2 class="text-success">Ordered items</h2>
+
+<div>
+    <table class="table borders">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Name</th>
+                <th>Warranty</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if(Model != null)foreach(var item in Model)
+            {
+                var prod = _context.Products.FirstOrDefault(p => p.Id == item.ProductId);
+                if (prod == null)
+                {
+                }
+                else
+                {
+                    <tr>
+                        <td> <img src="~/@prod.PhotoPath" width="120px"/></td>
+                    <td>@prod.Name</td>
+                    <td>@prod.WarrantyPeriod</td>
+                    <td>@item.ProductIndividualPrice <i class="fas fa-ruble-sign"></i></td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col col-9"></div>
+        <div class="col col-md-3">
+            <h5>Total cost: @Model.Sum(p => p.ProductIndividualPrice) <i class="fas fa-ruble-sign"></i></h5>         
+        </div>
+    </div>
+    
+</div>

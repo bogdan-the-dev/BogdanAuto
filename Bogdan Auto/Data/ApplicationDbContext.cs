@@ -10,5 +10,14 @@ namespace Bogdan_Auto.Data
             : base(options)
         {
         }
+
+        public DbSet<CustomerUser> CustomerUsers { get; set;}
+        public DbSet<Product> Products { get; set;}
+        public DbSet<Manufacturer> Manufacturers { get; set;}
+        public DbSet<Category> Categories { get; set;}
+        public DbSet<AdminUser> AdminUsers { get; set;}
+        public DbSet<DeliveryStaffUser> DeliveryStaffUsers { get;set;}
+        public DbSet<Order> Order { get; set;}
+        public DbSet<OrderProduct> OrderProduct { get; set;}
     }
 }

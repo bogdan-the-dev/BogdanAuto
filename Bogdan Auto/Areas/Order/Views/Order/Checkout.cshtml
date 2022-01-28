@@ -1,0 +1,96 @@
+﻿@model Bogdan_Auto.Models.Order
+@using Bogdan_Auto.Models
+@using Bogdan_Auto.Services
+@using Microsoft.AspNetCore.Http
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Checkout";
+        Layout = "~/Areas/Order/Views/_OrderLayout.cshtml";
+
+}
+@{
+
+    List<Product> products = HttpContextAccessor.HttpContext.Session.Get<List<Product>>("products");
+   
+    if (products == null)
+    {
+        products=new List<Product>();
+    }
+
+}
+<br />
+
+<h2 class="text-info">Checkout</h2>
+
+
+<form asp-action="Checkout" method="post" enctype="multipart/form-data">
+    <div class="p-4 rounded border row">
+        <div asp-validation-summary="ModelOnly" class="text-danger">
+
+        </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="PhoneNumber"></label>
+                </div>
+                <div class="col-4">
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+               
+            </div>
+            <br />
+            <br />
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="Address"></label>
+                </div>
+                <div class="col-4">
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                
+            </div>
+            
+        </div>
+        <br />
+        <h2>Items:</h2>
+        <div class="col-6 form-group row">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in products)
+                {
+                    <tr>
+                        <td>
+                            <img src="~/@item.PhotoPath" height="100px" width="150px"/>
+                        </td>
+                        <td>@item.Name</td>
+                        <td>@item.Price</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <div class="text-right">
+                <h3>Total Price : @products.Sum(c=>c.Price)</h3>
+            </div>
+            <div class="form-group text-right">
+                <input type="submit" value="Place Order" class="btn btn-success"/>
+            </div>
+        </div>
+       
+</form>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+  
+}
+
+
+

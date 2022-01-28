@@ -1,0 +1,74 @@
+﻿@using Bogdan_Auto.Models
+@model IEnumerable<Order>
+@{
+    Layout = "~/Areas/DeliveryStaff/Views/_DeliveryLayout.cshtml";
+    ViewData["Title"] = "Order Managemen";
+}
+<h2 class="text-info">Order Management</h2>
+<br />
+<div>
+    <table class="d-lg-table table-stried borders">
+        <tr class="table-info">
+            <th class="col-2"> 
+                @Html.DisplayNameFor(o => o.Id)
+            </th>
+            <th class="col-5">
+                @Html.DisplayNameFor(o => o.TrackingNumber)
+            </th>
+            <th class="col-4">
+                @Html.DisplayNameFor(o => o.Status)
+            </th>
+            <th></th>
+        </tr>
+        @if(Model != null)foreach(var item in Model)
+            {@if(item.ClientId != "deleted_account")
+                {          
+                    <tr>
+                        <td>
+                            @item.Id
+                        </td>
+                        @if(item.TrackingNumber == "")
+                        {
+                            <td>
+                                Not Available
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @item.TrackingNumber
+                            </td>
+                        }
+                        <td>
+                            @((OrderStatus)item.Status)
+                        </td>
+                        <partial name="~/Views/Shared/_ButtonPartialDelivery.cshtml" model="@item.Id"></partial>
+                    </tr>
+                }
+            }
+
+
+    </table>
+</div>
+@section scripts{
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var save = '@TempData["save"]'
+            if(save!='') {
+                alertify.success(save);
+            }
+            var edit = '@TempData["edit"]'
+            if(edit!='') {
+                alertify.success(edit);
+            }
+            var del = '@TempData["delete"]'
+            if (del!='') {
+                alertify.error(del);
+            }
+        })
+    </script>
+}

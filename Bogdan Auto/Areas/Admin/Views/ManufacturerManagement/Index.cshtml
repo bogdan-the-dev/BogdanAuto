@@ -1,0 +1,66 @@
+﻿@using Bogdan_Auto.Models
+@model IEnumerable<Manufacturer>
+@{
+    Layout = "~/Areas/Admin/Views/_AdminLayout.cshtml";
+    ViewData["Title"] = "Manufacturer Management";
+}
+
+<br />
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-info">Manufacturer List</h2>
+    </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-2 text-right">
+        <a asp-action="Create" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp;Add a new manufacturer</a>
+    </div>
+</div>
+<br />
+<div>
+    <table class="table table-striped borders">
+        <tr class="table-info">
+            <th>
+                @Html.DisplayNameFor(m=>m.Id)
+            </th> 
+            <th>
+                @Html.DisplayNameFor(m=>m.Name)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+        @if(Model != null)foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td style="width: 100px">
+                    <partial name="_ButtonPartial" model="@item.Id"/>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+@section scripts{
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var save = '@TempData["save"]'
+            if(save!='') {
+                alertify.success(save);
+            }
+            var edit = '@TempData["edit"]'
+            if(edit!='') {
+                alertify.success(edit);
+            }
+            var del = '@TempData["delete"]'
+            if (del!='') {
+                alertify.error(del);
+            }
+        })
+    </script>
+}
+
+    
